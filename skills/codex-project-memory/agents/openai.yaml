@@ -1,0 +1,4 @@
+interface:
+  display_name: "项目专业档案与精简工作流"
+  short_description: "按聊天保存项目指导、已验证经验与精简交接"
+  default_prompt: "使用 $codex-project-memory 整理本聊天项目经验与当前交接，后续按精简流程继续工作。"
