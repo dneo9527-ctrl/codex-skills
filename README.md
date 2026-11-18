@@ -1,19 +1,19 @@
 # Codex Skills
 
-**v0.1.0-preview.2 · MIT · Python 3.9+ · macOS / Linux**
+**v0.1.0-preview.3 · MIT · Python 3.9+ · macOS / Linux**
 
 本库提供两个可独立安装的通用 Skill：
 
 - `codex-project-memory`：为每个 Codex 聊天保留精简项目档案、长期约束和已验证经验，交接保留可选检查点中的授权、等待状态及操作收据。
-- `external-ai-team`：默认复用当前聊天右侧已打开的项目 AI 会话，保护草稿和暂停状态，读取实际结果后由 Codex 验证整合。
+- `external-ai-team`：优先复用当前聊天右侧项目 AI 会话，按聊天核对总控与 Agy/Muse/Claude 独立开关；保留草稿、暂停、绑定与模型设置，读取实际结果后由 Codex 验证整合。
 
 | 下载 | 完整包 |
 | --- | --- |
-| 多 AI 协作 Skill | [external-ai-team-0.1.0-preview.2.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.2/external-ai-team-0.1.0-preview.2.zip) |
-| 项目记忆 Skill（内容沿用 preview.1） | [codex-project-memory-0.1.0-preview.1.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.2/codex-project-memory-0.1.0-preview.1.zip) |
-| 本版完整源码与测试 | [codex-skills-0.1.0-preview.2-source.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.2/codex-skills-0.1.0-preview.2-source.zip) |
+| 多 AI 协作 Skill | [external-ai-team-0.1.0-preview.3.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.3/external-ai-team-0.1.0-preview.3.zip) |
+| 项目记忆 Skill（内容沿用 preview.1） | [codex-project-memory-0.1.0-preview.1.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.3/codex-project-memory-0.1.0-preview.1.zip) |
+| 本版完整源码与测试 | [codex-skills-0.1.0-preview.3-source.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.3/codex-skills-0.1.0-preview.3-source.zip) |
 
-[发行记录及 SHA256SUMS](https://github.com/dneo9527-ctrl/codex-skills/releases/tag/v0.1.0-preview.2) · [CI](https://github.com/dneo9527-ctrl/codex-skills/actions/workflows/checks.yml)
+[发行记录及 SHA256SUMS](https://github.com/dneo9527-ctrl/codex-skills/releases/tag/v0.1.0-preview.3) · [CI](https://github.com/dneo9527-ctrl/codex-skills/actions/workflows/checks.yml)
 
 ## 多 AI 协作：external-ai-team
 
@@ -29,7 +29,17 @@ python3 external-ai-team/install.py --codex-home /path/to/codex-home
 
 源码安装使用 `python3 skills/external-ai-team/install.py`。安装器已有目标时拒绝覆盖，不修改其他 Skill、AGENTS、权限、账号或模型。升级已有同名 Skill 时，先备份到 `skills` 目录外并核对自定义适配，再自行替换；安装器不自动迁移本机部署。重新加载后使用 `$external-ai-team`；默认参与还需使用者的项目指令与有效授权。宿主需提供能操作当前聊天浏览器的工具，目标 AI 服务需由使用者就绪。
 
-完整包包含 Skill、安装器、界面元数据、通用 Ag 参考和 MIT 许可。它不随包提供外部账号、Ag 服务、后台唤醒或网页登录；不自动上传私人文件、联系其他聊天或购买额度。已输入的草稿和生成中的任务会被保留，真正发送前重新核实页面与会话。全部网站、原生 Windows 及所有旧聊天自动发现均未验收；工具不可用时记录实际未完成状态。详见 [Skill 指引](skills/external-ai-team/SKILL.md)。
+完整包包含八个文件：Skill、安装器、界面元数据、通用 Ag 参考、提供方与启动约定、策略读取与可见控制台启动 helper，以及 MIT 许可。它不随包提供外部账号、Ag 服务、后台唤醒或网页登录；不自动上传私人文件、联系其他聊天或购买额度。已输入的草稿和生成中的任务会被保留，真正发送前重新核实页面与会话。全部网站、原生 Windows 及所有旧聊天自动发现均未验收；工具不可用时记录实际未完成状态。详见 [Skill 指引](skills/external-ai-team/SKILL.md)。
+
+## 提供方开关与控制台启动
+
+配套面板保存当前聊天的「多 AI 协作」总控及 Agy、Muse、Claude 独立开关；总控和选中提供方均允许才可派发。多个开启表示可选范围，不群发。关闭的提供方不会被自动替换，旧暂停不会因升级恢复。每次发送前重新读取当前聊天策略，不能用其他聊天的开关或全机最近会话推断。
+
+这些面板开关和离线策略需要支持对应接口的 Agy Console；仅安装 Skill 不会安装控制台或创建三个网站客户端。通用浏览器协作仍需宿主提供受支持的浏览器工具，目标站点和本项目会话由使用者准备。新版与相关面板完整包成套发布；具体配套版本与下载以本版 Release 为准。
+
+控制台自动启动与自动展示、协作许可分别保存，自动启动默认关闭。仅在当前活跃任务确需 Agy、当前聊天允许自动启动、用户配置了有效 `.command`／`.cmd` 正规入口，且服务明确未运行时，helper 打开一次可见终端并有界等待；已有服务直接复用。启动结果不明时保留待核实记录，避免重复开启。不新增后台常驻服务，也不唤醒空闲 Codex。Linux 当前只做状态检查，未支持自动打开终端。
+
+策略缺失、损坏、身份不匹配、总控暂停或提供方关闭时停止新派发，继续 Codex 可独立完成的工作。服务就绪与获得发送权限分别核对；官方登录、文件外发及付费仍遵守使用者授权。真实冷启动、Windows 原生终端和 Muse/Claude 实际网页投递尚未验收，不能将隔离测试视为跨站端到端通过。见 [开关与启动约定](skills/external-ai-team/references/collaboration-controls.md)。
 
 ## 项目记忆：codex-project-memory 安装
 
@@ -73,4 +83,4 @@ python3 codex-project-memory/install.py --codex-home /path/to/codex-home
 python3 -B -m unittest discover -s tests -v
 ```
 
-测试仅使用临时数据。CI 对 macOS/Linux 的 Python 3.9 与 3.13 执行行为检查；结果须以相应提交的 Actions 为准。项目源码采用 [MIT](LICENSE)，独立 Skill 包内也带同一许可证。
+测试仅使用临时数据。84 项隔离行为检查包含项目记忆 26 项及协作策略、启动、真实解析器集成与安装 58 项；测试只使用合成聊天身份和临时目录，不启动真实终端或模型。CI 对 macOS/Linux 的 Python 3.9 与 3.13 执行行为检查；结果须以相应提交的 Actions 为准。项目源码采用 [MIT](LICENSE)，独立 Skill 包内也带同一许可证。

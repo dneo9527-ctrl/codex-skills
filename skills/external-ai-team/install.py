@@ -8,7 +8,8 @@ import shutil
 import sys
 
 SOURCE = Path(__file__).resolve().parent
-FILES = ('SKILL.md', 'LICENSE', 'install.py', 'references/antigravity.md', 'agents/openai.yaml')
+FILES = ('SKILL.md', 'LICENSE', 'install.py', 'references/antigravity.md', 'agents/openai.yaml',
+         'references/collaboration-controls.md', 'scripts/collaboration_policy.py', 'scripts/console_start.py')
 
 
 def install(codex_home, source=SOURCE):

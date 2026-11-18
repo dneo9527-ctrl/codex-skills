@@ -1,6 +1,6 @@
 interface:
-  display_name: "多 AI 协作 · 右侧浏览器优先"
-  short_description: "优先复用本聊天右侧 AI 网页，分工复核、保留项目会话并验证结果，兼容 Ag 面板"
+  display_name: "多 AI 协作"
+  short_description: "按聊天启停 Agy、Muse、Claude，复用右侧项目会话，并按设置启动控制台"
 
 policy:
   allow_implicit_invocation: true

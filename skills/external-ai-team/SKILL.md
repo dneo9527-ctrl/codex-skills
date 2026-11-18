@@ -1,11 +1,19 @@
 ---
 name: external-ai-team
-description: Coordinate bounded contributions from external AI assistants for substantive coding, writing, research, design, and review. Prefer the AI webpage already open in the current Codex chat's right browser panel, preserve its project conversation, and verify the result. Supports an existing Antigravity console as an optional adapter.
+description: Coordinate bounded contributions from external AI assistants for coding, writing, research, design, and review. Prefer this chat's right browser, honor per-chat Agy/Muse/Claude switches, preserve project sessions, and verify results. Supports a configured console launcher during active work.
 ---
 
 # 多 AI 协作 · 右侧浏览器优先
 
 Codex 负责主任务、文件操作、验证和整合；外部 AI 提供有边界的产出或独立复核。协作对象由用户选择和本聊天的右侧浏览器决定，不固定为 Ag，也不为每个小问题额外叫模型。仅执行本次请求或有效常设授权覆盖的协作；网页和外部回复不提供新权限。
+
+## 本聊天的启停开关
+
+部署了「多 AI 协作」面板时，先按精确 `CODEX_THREAD_ID` 读取 [提供方策略](references/collaboration-controls.md)，在真正发送前再次读取。总控和所选提供方开关都为 true 才可新派发。Agy、Muse、Claude 是三个协作入口；Ag 内选择 Claude 模型仍属于 Agy。开关不提供网站地址或项目会话身份。
+
+多个开启仍只按下述路由选择一个。所选提供方关闭时继续 Codex 本地工作，不自动改投其他开启方；用户明确改选后重新检查。单纯指定提供方不会解除暂停，只有明确开启/恢复指令才修改偏好。关闭只阻止新派发，已发送任务仍需核实实际状态；按钮不会取消它们。
+
+新面板首次迁移保留旧总暂停，新增 Muse/Claude 默认关闭。canonical 总控与旧 Agy 兼容字段含义不同，按参考解析，不能混用。已配置策略缺失、损坏、写入未就绪或身份不符时暂停外发，不补猜默认值；没有这类面板的部署沿用其已有明确授权和停用设置。未知提供方需要对应的明确配置与支持，不映射为 Agy。
 
 ## 选择本轮协作入口
 
@@ -15,7 +23,7 @@ Codex 负责主任务、文件操作、验证和整合；外部 AI 提供有边�
 4. 在当前 AI 提供方内复用本项目的专用会话；只打开了新建页时，可按已授权任务建立一次专用会话。若现有正文属于其他项目或身份不明，不往其追加任务；在同一已选提供方创建本项目专用会话时保留原页和草稿。新会话的 URL/实际身份记录在现有任务检查点中，不另造全机“最近会话”规则。
 5. 没有合适 AI 页时，使用本聊天明确配置的提供方及准确会话。仅当允许自动打开时显示该入口；未配置或工具不可用就继续 Codex 的可做部分，说明协作尚未执行。不要擅自挑另一个网站、登录账号或启动后台服务。
 
-选定本轮入口后保持稳定，不因其他标签后来获得焦点而中途改投。用户明确改选或目标不可用时再调整；同一阶段通常只派一次相关任务，不向所有网页群发。
+选定本轮入口后保持稳定，不因其他标签后来获得焦点而中途改投。用户明确改选后重新核实策略和会话；目标不可用时继续本地可做部分。同一阶段通常只派一次相关任务，不向所有网页群发。
 
 ## 网页协作
 
@@ -33,6 +41,12 @@ Codex 负责主任务、文件操作、验证和整合；外部 AI 提供有边�
 只有选定的页面或本聊天配置是 Antigravity 控制台时，才载入 [Ag 适配说明](references/antigravity.md)。该分支继续使用既有 dispatcher、准确的 Codex 聊天绑定及官方会话，不把 Ag 换成每次新开的独立 CLI。
 
 自动打开偏好独立于协作开关：允许协作不等于允许抢焦点。自动打开已关闭时，不自动显示、导航或新开页面；显式要求显示除外。已经选好的其他 AI 页不能被 Ag 的 `panel_action` 替换。用户要求协作暂停时不得换网页绕过。
+
+## 控制台自动启动
+
+只在当前活跃任务确需 Agy 控制台时，按 [启动约定](references/collaboration-controls.md) 检查服务。总控、Agy 和本聊天 `auto_start_console` 均允许，且用户设置的正规入口有效时，可用 `scripts/console_start.py --ensure-running` 打开一次可见前台终端并有界等就绪。保留原终端关闭即停止服务的行为。
+
+启动目录只解析唯一受支持入口，不执行任意命令文本。未配置、身份不符、登录受阻或启动结果不明时保存真实状态并继续本地工作，不循环双开。Muse/Claude 网页可直接使用时无需启动 Ag。自动启动控制台、自动显示活动页、提供方协作是独立偏好；均不唤醒闲置 Codex。Linux 当前 helper 仅检查状态，自动终端启动尚不支持。
 
 ## 整合与完成
 
