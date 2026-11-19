@@ -1,6 +1,6 @@
 # Codex Skills
 
-**v0.1.0-preview.3 · MIT · Python 3.9+ · macOS / Linux**
+**v0.1.0-preview.4 · MIT · Python 3.9+ · macOS / Linux**
 
 本库提供两个可独立安装的通用 Skill：
 
@@ -9,11 +9,11 @@
 
 | 下载 | 完整包 |
 | --- | --- |
-| 多 AI 协作 Skill | [external-ai-team-0.1.0-preview.3.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.3/external-ai-team-0.1.0-preview.3.zip) |
-| 项目记忆 Skill（内容沿用 preview.1） | [codex-project-memory-0.1.0-preview.1.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.3/codex-project-memory-0.1.0-preview.1.zip) |
-| 本版完整源码与测试 | [codex-skills-0.1.0-preview.3-source.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.3/codex-skills-0.1.0-preview.3-source.zip) |
+| 多 AI 协作 Skill | [external-ai-team-0.1.0-preview.4.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.4/external-ai-team-0.1.0-preview.4.zip) |
+| 项目记忆 Skill（内容沿用 preview.1） | [codex-project-memory-0.1.0-preview.1.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.4/codex-project-memory-0.1.0-preview.1.zip) |
+| 本版完整源码与测试 | [codex-skills-0.1.0-preview.4-source.zip](https://github.com/dneo9527-ctrl/codex-skills/releases/download/v0.1.0-preview.4/codex-skills-0.1.0-preview.4-source.zip) |
 
-[发行记录及 SHA256SUMS](https://github.com/dneo9527-ctrl/codex-skills/releases/tag/v0.1.0-preview.3) · [CI](https://github.com/dneo9527-ctrl/codex-skills/actions/workflows/checks.yml)
+[发行记录及 SHA256SUMS](https://github.com/dneo9527-ctrl/codex-skills/releases/tag/v0.1.0-preview.4) · [CI](https://github.com/dneo9527-ctrl/codex-skills/actions/workflows/checks.yml)
 
 ## 多 AI 协作：external-ai-team
 
@@ -29,7 +29,7 @@ python3 external-ai-team/install.py --codex-home /path/to/codex-home
 
 源码安装使用 `python3 skills/external-ai-team/install.py`。安装器已有目标时拒绝覆盖，不修改其他 Skill、AGENTS、权限、账号或模型。升级已有同名 Skill 时，先备份到 `skills` 目录外并核对自定义适配，再自行替换；安装器不自动迁移本机部署。重新加载后使用 `$external-ai-team`；默认参与还需使用者的项目指令与有效授权。宿主需提供能操作当前聊天浏览器的工具，目标 AI 服务需由使用者就绪。
 
-完整包包含八个文件：Skill、安装器、界面元数据、通用 Ag 参考、提供方与启动约定、策略读取与可见控制台启动 helper，以及 MIT 许可。它不随包提供外部账号、Ag 服务、后台唤醒或网页登录；不自动上传私人文件、联系其他聊天或购买额度。已输入的草稿和生成中的任务会被保留，真正发送前重新核实页面与会话。全部网站、原生 Windows 及所有旧聊天自动发现均未验收；工具不可用时记录实际未完成状态。详见 [Skill 指引](skills/external-ai-team/SKILL.md)。
+完整包包含九个文件：Skill、安装器、界面元数据、通用 Ag 参考、提供方与启动约定、圆桌会议参考、策略读取与可见控制台启动 helper，以及 MIT 许可。它不随包提供外部账号、Ag 服务、后台唤醒或网页登录；不自动上传私人文件、联系其他聊天或购买额度。已输入的草稿和生成中的任务会被保留，真正发送前重新核实页面与会话。全部网站、原生 Windows 及所有旧聊天自动发现均未验收；工具不可用时记录实际未完成状态。详见 [Skill 指引](skills/external-ai-team/SKILL.md)。
 
 ## 提供方开关与控制台启动
 
@@ -40,6 +40,14 @@ python3 external-ai-team/install.py --codex-home /path/to/codex-home
 控制台自动启动与自动展示、协作许可分别保存，自动启动默认关闭。仅在当前活跃任务确需 Agy、当前聊天允许自动启动、用户配置了有效 `.command`／`.cmd` 正规入口，且服务明确未运行时，helper 打开一次可见终端并有界等待；已有服务直接复用。启动结果不明时保留待核实记录，避免重复开启。不新增后台常驻服务，也不唤醒空闲 Codex。Linux 当前只做状态检查，未支持自动打开终端。
 
 策略缺失、损坏、身份不匹配、总控暂停或提供方关闭时停止新派发，继续 Codex 可独立完成的工作。服务就绪与获得发送权限分别核对；官方登录、文件外发及付费仍遵守使用者授权。真实冷启动、Windows 原生终端和 Muse/Claude 实际网页投递尚未验收，不能将隔离测试视为跨站端到端通过。见 [开关与启动约定](skills/external-ai-team/references/collaboration-controls.md)。
+
+## 独立圆桌会议（配套 Agy Console preview.15）
+
+完整九文件 Skill 与 [Agy Console preview.15](https://github.com/dneo9527-ctrl/agy-console/releases/tag/v0.1.0-preview.15) 成套发行，完整面板包也含完全相同的 Skill。默认 `assist` 继续单提供方协作；明确设置为 `roundtable` 时，活跃 Codex 依据准确聊天的计划创建独立会议，组织提案、互评与选定主持总结。每次新外发仍重新检查总控与对应提供方许可，保留项目会话、模型、草稿和暂停。
+
+会议使用稳定 ID 和来源标识，冻结主持、参与方与工作会话。Muse/Claude 的真实网页贡献可以独立入会，无需等待 Agy 成功；Agy 阶段关联真实官方 CLI 任务。未知发送结果先核对原会话，不盲目补发；缺席、失败和部分完成分别记录。见 [圆桌流程与恢复](skills/external-ai-team/references/roundtable.md)。
+
+需使用者准备可用的项目网页和受支持浏览器工具；Skill 不替人登录，不创建后台采集器，不唤醒闲置 Codex，也不保证所有旧聊天自动加载。开发者 Mac 的现场记录与发行端隔离测试、各平台 CI 分别列示，不能推断 Windows/Linux 真实模型或跨窗口自动运行已经验收。由 preview.8 升级面板必须使用完整安装包；程序更新不会自动安装 Skill。
 
 ## 项目记忆：codex-project-memory 安装
 
