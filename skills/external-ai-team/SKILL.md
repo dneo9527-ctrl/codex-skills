@@ -1,6 +1,6 @@
 ---
 name: external-ai-team
-description: Coordinate bounded contributions from external AI assistants for coding, writing, research, design, and review. Prefer this chat's right browser, honor per-chat Agy/Muse/Claude switches, preserve project sessions, and verify results. Supports a configured console launcher during active work.
+description: Coordinate bounded contributions from external AI assistants for coding, writing, research, design, and review. Prefer this chat's right browser, honor per-chat Agy/Muse/Claude switches, preserve project sessions, and verify results. Execute saved roundtable plans and support a configured console launcher during active work.
 ---
 
 # 多 AI 协作 · 右侧浏览器优先
@@ -11,15 +11,17 @@ Codex 负责主任务、文件操作、验证和整合；外部 AI 提供有边�
 
 部署了「多 AI 协作」面板时，先按精确 `CODEX_THREAD_ID` 读取 [提供方策略](references/collaboration-controls.md)，在真正发送前再次读取。总控和所选提供方开关都为 true 才可新派发。Agy、Muse、Claude 是三个协作入口；Ag 内选择 Claude 模型仍属于 Agy。开关不提供网站地址或项目会话身份。
 
-日常协作按下述路由选择一个提供方；明确的圆桌模式按参与计划组织有界讨论。多个开关开启本身不等于群发。所选提供方关闭时继续 Codex 本地工作，不自动改投其他开启方；用户明确改选后重新检查。单纯指定提供方不会解除暂停，只有明确开启/恢复指令才修改偏好。关闭只阻止新派发，已发送任务仍需核实实际状态；按钮不会取消它们。
+日常 `assist` 协作按下述路由选择一个提供方；用户明确要求圆桌，或本聊天已保存有效 `roundtable` 模式时，才按冻结参与计划组织两轮有界讨论。多个开关开启本身不等于群发。所选提供方关闭时继续 Codex 本地工作，不自动改投其他开启方；用户明确改选后重新检查。单纯指定提供方不会解除暂停，只有明确开启/恢复指令才修改偏好。关闭只阻止新派发，已发送任务仍需核实实际状态；按钮不会取消它们。
 
 新面板首次迁移保留旧总暂停，新增 Muse/Claude 默认关闭。canonical 总控与旧 Agy 兼容字段含义不同，按参考解析，不能混用。已配置策略缺失、损坏、写入未就绪或身份不符时暂停外发，不补猜默认值；没有这类面板的部署沿用其已有明确授权和停用设置。未知提供方需要对应的明确配置与支持，不映射为 Agy。
 
-## 圆桌模式
+## 圆桌模式与任务恢复
 
-已有部署为本聊天提供有效 `roundtable` / `roundtable_plan`，且模式是 `roundtable` 时，在当前活跃、适合协作的任务中读取[圆桌会议](references/roundtable.md)，沿用其主持和已核实的项目会话。用户明确限定提供方、要求仅 Codex 或暂停协作时优先遵守，不为凑人数启用提供方。未配置圆桌或模式是 `assist` 时保留下述单提供方路由。
+在已配置面板的实质任务开始或恢复时，先只读核实本聊天策略，再从在线正规绑定读取精确 `codex_thread_id`、`roundtable` / `roundtable_plan` 与能力。读取元数据不选定 Ag、不解除暂停，也不因只想读设置而启动服务。用户明确限定提供方、仅 Codex 或暂停时优先遵守。
 
-圆桌记录与实际外部调用分开：创建计划、保存开关或拿到会话地址都不表示模型已参与。该流程在活跃 Codex 回合内执行，不唤醒闲置模型，也不在后台替网页采集消息。
+模式为 `assist` 时沿用下方单提供方路由。已保存有效 `roundtable` 模式时，在当前活跃、适合协作的任务中执行[圆桌流程](references/roundtable.md)，不要求用户每轮重说“保持协作”。先恢复现有任务检查点中的会议和已发结果；没有属于当前用户任务的会议才创建一次。读取计划、保存开关或拿到URL都不代表助手已参与。
+
+圆桌允许向冻结计划内且逐个获准的参与方发送各有分工的有限请求；它不授权开启提供方、改模型/账号、上传私人资料或联系其他 Codex 聊天。计划缺失、身份不符或发送状态不明时保留原任务并核对，不新建一场绕过。该流程仅在活跃回合运行，不唤醒闲置模型、不加后台收集器。
 
 ## 选择本轮协作入口
 
@@ -29,7 +31,7 @@ Codex 负责主任务、文件操作、验证和整合；外部 AI 提供有边�
 4. 在当前 AI 提供方内复用本项目的专用会话；只打开了新建页时，可按已授权任务建立一次专用会话。若现有正文属于其他项目或身份不明，不往其追加任务；在同一已选提供方创建本项目专用会话时保留原页和草稿。新会话的 URL/实际身份记录在现有任务检查点中，不另造全机“最近会话”规则。
 5. 没有合适 AI 页时，使用本聊天明确配置的提供方及准确会话。仅当允许自动打开时显示该入口；未配置或工具不可用就继续 Codex 的可做部分，说明协作尚未执行。不要擅自挑另一个网站、登录账号或启动后台服务。
 
-选定本轮入口后保持稳定，不因其他标签后来获得焦点而中途改投。用户明确改选后重新核实策略和会话；目标不可用时继续本地可做部分。同一阶段通常只派一次相关任务，不向所有网页群发。
+日常协作选定本轮入口后保持稳定；圆桌逐方沿用已核实的项目会话。均不因其他标签后来获得焦点而中途改投。用户明确改选后重新核实策略和会话；目标不可用时继续本地可做部分。同一阶段通常只派一次相关任务，不向所有网页群发。
 
 ## 网页协作
 
@@ -44,7 +46,7 @@ Codex 负责主任务、文件操作、验证和整合；外部 AI 提供有边�
 
 ## Ag 面板兼容
 
-只有选定的页面或本聊天配置是 Antigravity 控制台时，才载入 [Ag 适配说明](references/antigravity.md)。该分支继续使用既有 dispatcher、准确的 Codex 聊天绑定及官方会话，不把 Ag 换成每次新开的独立 CLI。
+日常选定的页面/本聊天配置是 Antigravity 控制台，或圆桌已明确选定 Agy 为参与方时，才载入 [Ag 适配说明](references/antigravity.md)。该分支继续使用既有 dispatcher、准确的 Codex 聊天绑定及官方会话，不把 Ag 换成每次新开的独立 CLI。
 
 自动打开偏好独立于协作开关：允许协作不等于允许抢焦点。自动打开已关闭时，不自动显示、导航或新开页面；显式要求显示除外。已经选好的其他 AI 页不能被 Ag 的 `panel_action` 替换。用户要求协作暂停时不得换网页绕过。
 

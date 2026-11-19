@@ -1,7 +1,7 @@
-# 0.1.0-preview.4
+# 0.1.0-preview.5
 
-The complete nine-file external-ai-team Skill adds an explicit roundtable route paired with Agy Console 0.1.0-preview.15: independent meeting IDs, proposals, mutual review and the selected host summary. Assist remains the default. Exact-chat master/provider checks, drafts, saved models, pause and idempotent recovery remain effective at every new send.
+The complete nine-file external-ai-team Skill is paired with Agy Console 0.1.0-preview.16. It resumes the exact saved meeting and observed results on continuation, without recreating a meeting or resending uncertain work. Read-only inspection does not call a model; unsent-only absence needs an explicit reason and acknowledgement. Host summary, wall-clock time and known CLI usage remain distinct from unmeasured webpage usage.
 
-The new references/roundtable.md ships in the installer and every platform copy. Install explicitly with python3 external-ai-team/install.py, optionally selecting --codex-home. Existing destinations are refused and configuration, AGENTS, other Skills and permissions are preserved. The unchanged project-memory preview.1 ZIP is retained.
+Only SKILL.md and references/roundtable.md change from preview.4. The installer, MIT license, scripts and unchanged project-memory preview.1 package are retained. Explicit temporary installation must preserve existing rules and refuse overwriting an existing destination.
 
-The Skill requires a compatible console and supported host browser tools for a live roundtable. It does not wake idle Codex chats, collect pages in the background, log in, switch accounts or add a service. Unknown sends are checked in their original session without blind retries. Developer Mac acceptance does not certify Windows/Linux model delivery or automatic cross-window adoption. Exact-commit CI, real archive downloads and disposable installation checks are recorded in the final Release.
+This guides active Codex tasks. It does not wake idle chats, collect webpages, change accounts/models/permissions or add a service. Host automatic visible expansion, Windows/Linux real login/model delivery, system sleep/wake and universal cross-window adoption remain unaccepted. Final CI, matched complete packages and anonymous downloads are recorded by the publisher.
