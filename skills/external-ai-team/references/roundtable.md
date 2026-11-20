@@ -68,12 +68,27 @@ python3 /confirmed/console/bridge.py --meeting-event /absolute/observed-event.js
 
 事件字段：`{meeting_id, codex_thread_id, source_id, provider, stage, status, text?, source_url?, detail?}`。stage为proposal/review/summary；status为sending/waiting/completed/failed/unavailable/cancelled。建议event source_id沿用会议source_id加 `.provider.stage.status`，同一事件重新读取时复用原ID与完全相同内容；每次真实状态变化使用不同ID，不依靠新ID获得重发许可。completed要求真实非空text；failed/unavailable/cancelled写简短实际原因。待发且确定未发送的不可用方才可unavailable；sending/waiting不能退回未发送或凭超时称缺席，不能盲重试。终态不覆盖；实际结果已登记就复用，重新评估属于新授权任务。
 
+## 按阶段获取本场材料
+
+当 `--ensure` 返回 `roundtable_context_supported:true` 时，网页参与方或 Codex 在撰写本轮请求前，可按冻结会议与实际阶段读取一次：
+
+```bash
+python3 /confirmed/console/bridge.py --meeting-context MEETING_ID \
+  --meeting-stage review --meeting-provider muse
+```
+
+这是只读材料，不发送消息、不打开标签、不解除暂停。核对返回的精确聊天、会议、分支、提供方和阶段后，取 `text` 作为本轮参考；发送前仍需重查策略与真实网页草稿。`proposal` 不附同轮发言；`review` 只含首轮；`summary` 只含前两轮并仅供冻结主持。前轮未结束会拒绝读取下一阶段。不要把其他场记录、同轮已到的意见或完整聊天历史混入首轮。
+
+关联会议的 Agy 任务由服务在提交时冻结同一快照，候补沿用；不再用 `--context` 重复追加整份会议记录。快照包括真实状态，含转义的 JSON 总量上限 12,000 字符，长文公平保留头尾并标明省略，完整原文仍留在面板。`truncated` 是材料裁剪，不能称为模型记忆压缩或 token 节省；官方持久会话历史仍存在。
+
+旧后台没有该能力时继续按既有流程手工整理准确的本场前阶段真实材料；不要擅自启动新服务、重建会议或虚构上下文。
+
 ## 主持总结、显示与完成
 
 前两轮的所有槽位到终态后，由**冻结主持**依据实际发言归纳采用项、分歧、代价、未完成项及建议验证。Codex主持才记录自己的summary；外部主持必须取得其真实总结，不让Codex冒名。主持不可用时保留原主持，记录unavailable/真实失败；Codex只在本聊天明确说明状态，不静默换主持。暂停时不得启动新总结调用，已有尝试可按真实结果完成观察。
 
 使用原会议查询返回的slots/speakers、status、phase、completed_count/total_count和revision核对。三方两轮加主持为7个槽位，只有全部真实完成才是completed；缺席/失败/取消等收尾为partial，不能称全员共识。面板显示记录与真实发送分开验收；使用部署支持的部分总结/核对操作时先读其实际契约，不以普通事件取消CLI进程。
 
-Agy自动显示仍独立受 `auto_open_activity` 控制。允许时复用本聊天已有固定标签，在右侧显现并核实正确会议/活动；URL/句柄/排队打开不等于可见。关闭时不导航、不抢焦点；不以Agy panel_action覆盖已选Muse/Claude项目页，不反复开新标签。网页参与方沿用原会话，不通过刷新毁掉草稿或正在生成的结果。
+Agy自动显示仍独立受 `auto_open_activity` 控制。允许时消费新会议创建返回的 `panel_action`，复用本聊天已有固定标签，在右侧显现并核实正确会议/活动；无标签时只创建返回的准确会议URL。支持版本会带 `meeting` 参数并在页内进入本场；已有页沿现有活动跟随更新，不因每条事件同步再次显示或新开标签。URL/句柄/排队打开不等于可见；工具指标与用户本次实际观察冲突时按[显现证据规则](antigravity.md)分别记录。关闭时不导航、不抢焦点；不以Agy panel_action覆盖已选Muse/Claude项目页，不反复开新标签。网页参与方沿用原会话，不通过刷新毁掉草稿或正在生成的结果。
 
 有界等待前更新同一检查点：精确meeting/turn、provider_sessions、每槽位发送是否确认、正文/请求/回执路径、当前阶段和下一步；不要保存凭据。恢复先读取这些原记录，`sending`/`waiting`只允许核对原会话，idle模型不因Skill或页面自动醒来。结果整合后独立验证，并按已支持的 `--review-turn ACTUAL_ID --review-file FILE` 回填Agy采纳/拒绝/暂缓及实际检查；未支持写pending。最终汇报实际改动与边界，不能把设置开启、脚本可用或模型意见一致当作全自动运行验收。

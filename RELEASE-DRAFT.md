@@ -1,7 +1,7 @@
-# 0.1.0-preview.5
+# Codex Skills 0.1.0-preview.6
 
-The complete nine-file external-ai-team Skill is paired with Agy Console 0.1.0-preview.16. It resumes the exact saved meeting and observed results on continuation, without recreating a meeting or resending uncertain work. Read-only inspection does not call a model; unsent-only absence needs an explicit reason and acknowledgement. Host summary, wall-clock time and known CLI usage remain distinct from unmeasured webpage usage.
+Complete nine-file external-ai-team Skill paired with Agy Console preview.23. Only references/antigravity.md and references/roundtable.md change from preview.5. Exact meeting URLs, existing-tab activity following, bounded visibility observation and separate user/tool evidence preserve drafts, reading focus and pending delivery. A queued open or screenshot never proves visible presentation.
 
-Only SKILL.md and references/roundtable.md change from preview.4. The installer, MIT license, scripts and unchanged project-memory preview.1 package are retained. Explicit temporary installation must preserve existing rules and refuse overwriting an existing destination.
+Installer, scripts, license, primary Skill and codex-project-memory preview.1 are unchanged. Explicit installation preserves unrelated guidance and refuses overwriting an existing destination. Complete packages and accurate final CI/download receipts are recorded by the publisher. No idle wake, collector, account/model/permission changes or universal automatic-adoption claim. Native project-memory requires POSIX locks.
 
-This guides active Codex tasks. It does not wake idle chats, collect webpages, change accounts/models/permissions or add a service. Host automatic visible expansion, Windows/Linux real login/model delivery, system sleep/wake and universal cross-window adoption remain unaccepted. Final CI, matched complete packages and anonymous downloads are recorded by the publisher.
+The matching panel freezes bounded prior-stage material at submit and exposes a read-only meeting-context endpoint. The Skill checks exact chat/meeting/branch/stage/provider, keeps prior-stage barriers, and rechecks policy/composer before delivery. This does not clear official persistent history or establish total token savings.
