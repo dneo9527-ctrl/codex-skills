@@ -36,7 +36,7 @@
 
 新会议 `source_id` 用确定性标识：`rt-task-` + SHA256(精确thread + 换行 + task_id + 换行 + branch)的前48位十六进制；保留原输入与创建JSON路径。不得以当前时间、进程ID、输出目录、全局最近记录或每次恢复重新生成UUID作为任务身份。会话与来源ID不构成发送授权。
 
-创建请求仅 `{codex_thread_id, source_id, topic, branch?}`，主持/参与方由服务冻结；不能客户端自填。先保存prepared状态，再提交一次，立即保存返回的 `meeting_id` 与真实回执：
+创建请求为 `{codex_thread_id, source_id, topic, branch?}`；支持预设的新后台还允许本场 `preset`，见下节。主持/参与方由服务冻结，不能客户端自填。先保存prepared状态，再提交一次，立即保存返回的 `meeting_id` 与真实回执：
 
 ```bash
 python3 /confirmed/console/bridge.py --meeting-create /absolute/create.json
@@ -44,6 +44,16 @@ python3 /confirmed/console/bridge.py --meeting-view MEETING_ID
 ```
 
 示例路径须替换成已核实部署。dispatcher读取当前真实环境 `CODEX_THREAD_ID`，不能复制其他聊天ID。创建与查询本身不调用模型。创建返回不明时保持原source_id、任务和JSON；先按保存ID或分页查找该source_id。若无ID且创建结果确实未收到，可用**完全相同**创建JSON再次核对服务的幂等回执，不能换source_id、主题或分支另开一场；这只是元数据幂等核对，不是模型或网页重发。找到多个/不匹配记录即停止外发核对，不能挑最新一条。
+
+## 新会议预设
+
+当 `--ensure` 明确返回 `roundtable_workspace_supported:true` 和 `roundtable_presets_supported:true` 时，读取同一回执的 `roundtable_workspace_preferences`、`roundtable_presets`。三个预设为 `general`（讨论）、`code_review`（代码审查）、`paper_review`（论文评审）。通常沿用已保存预设；用户选择只用于本场时，在创建 JSON 中加 `preset`。只有用户要求保存下次默认时才执行：
+
+```bash
+python3 /confirmed/console/bridge.py --ensure --roundtable-preset code_review
+```
+
+这是当前准确聊天的新会议指导，不是协作许可，不改变主持、参与方、模型或暂停，也不开始会议。新会议将完整预设文字冻结在 `workspace.preset`；已创建会议继续用自己的快照。预设不能缩短既定两轮、跳过待回复方或将论文评审意见当作真实文献证据。旧会议无预设就按旧协议继续，不回填。
 
 ## 两轮真实分工
 
@@ -83,9 +93,40 @@ python3 /confirmed/console/bridge.py --meeting-context MEETING_ID \
 
 旧后台没有该能力时继续按既有流程手工整理准确的本场前阶段真实材料；不要擅自启动新服务、重建会议或虚构上下文。
 
+## 按需核对材料与用量
+
+支持 `roundtable_workspace_supported:true` 时，需要追溯输入或来源才读取：
+
+```bash
+python3 /confirmed/console/bridge.py --meeting-workspace MEETING_ID
+```
+
+这次只读返回本场 `materials`、`contexts`、`usage`、`decisions` 和冻结预设，不调用模型、不打开面板或修改许可。`contexts[].state=frozen` 且 `provenance=cli_enqueue_snapshot` 才是已保存的原始 Agy 入队材料；`snapshot` 不是官方会话全部历史。`not_recorded`、`not_dispatched`、`invalid` 保持原含义，不能用当前记录重新生成提示词冒充历史输入。网页实际输入未由后台冻结，不能据此宣称网页也收到同一快照。
+
+新会议可复用完全相同的材料正文：`text_ref` 指向前一条真实 `source_id`，每条来源、阶段和状态仍保留。长材料裁剪、界面折叠、精确去重均不等于官方历史压缩；没有同任务测量就不报节省比例。已知 CLI input/output/cache 按其实际 scope 说明；Codex、Muse、Claude 未报告的用量仍为未知，不能当零或并入全场合计。
+
 ## 主持总结、显示与完成
 
 前两轮的所有槽位到终态后，由**冻结主持**依据实际发言归纳采用项、分歧、代价、未完成项及建议验证。Codex主持才记录自己的summary；外部主持必须取得其真实总结，不让Codex冒名。主持不可用时保留原主持，记录unavailable/真实失败；Codex只在本聊天明确说明状态，不静默换主持。暂停时不得启动新总结调用，已有尝试可按真实结果完成观察。
+
+支持 `roundtable_decisions_supported:true` 时，冻结主持的真实 completed summary 可额外带显式 `decisions`。四类分别为建议采用、分歧、待验证、下一步；每项必须引用本场真实终态提案或互评的 `source_id`，从原会议 slots/speakers 读取，不能按提供方名字或正文关键词猜 ID。例如：
+
+```json
+{
+  "decisions": {
+    "schema_version": 1,
+    "suggested_adoption": [{
+      "text": "主持实际提出的建议",
+      "sources": [{"source_id": "ACTUAL_TERMINAL_SOURCE_ID"}]
+    }],
+    "disagreements": [],
+    "needs_verification": [],
+    "next_steps": []
+  }
+}
+```
+
+上例是 summary 事件的可选字段，须替换真实来源并与已有事件字段一起提交；可补 `provider/stage/turn_id`，但必须与同一真实来源匹配。主持是 Codex 时由 Codex根据实际发言写总结；主持是网页方时只同步它实际返回的条目，不替其编造。Agy 主持的结构化结果必须来自关联原生任务的严格 JSON `{"summary":"文字总结","decisions":{...}}`，不能用 observed event 冒充。未提供结构化条目的旧总结继续保留为普通文字，不解析 Markdown 猜共识；后台不支持时也不静默删除决策字段强行提交。建议采用不是用户批准，来源存在也不证明所有参与方同意。
 
 使用原会议查询返回的slots/speakers、status、phase、completed_count/total_count和revision核对。三方两轮加主持为7个槽位，只有全部真实完成才是completed；缺席/失败/取消等收尾为partial，不能称全员共识。面板显示记录与真实发送分开验收；使用部署支持的部分总结/核对操作时先读其实际契约，不以普通事件取消CLI进程。
 
